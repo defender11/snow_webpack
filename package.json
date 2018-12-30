@@ -1,0 +1,30 @@
+{
+  "name": "js_holliday",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "babel": "babel --presets es2015 js/main.js -o build/main.bundle.js",
+    "start": "http-server",
+    "webpack": "webpack --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-loader": "^7.1.4",
+    "jquery": "^3.3.1",
+    "loadash": "^1.0.0",
+    "webpack": "^4.28.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-encoding-plugin": "^0.2.1",
+    "css-loader": "^0.28.11",
+    "extract-text-webpack-plugin": "next",
+    "node-sass": "^4.10.0",
+    "sass-loader": "^6.0.7",
+    "style-loader": "^0.20.3",
+    "uglifyjs-webpack-plugin": "^1.2.3"
+  }
+}
