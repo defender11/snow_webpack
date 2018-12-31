@@ -38,15 +38,17 @@ app = class App {
 
     render() {
         for (let id = 0; id < this.getUnitsCount(); id++) {
+            let unit = this.getUnit(id);
 
-            if (this.units[id].isDead()) {
+            if (unit.isDead()) {
                 this.removeUnit(id);
                 this.createUnit();
+
+            } else {
+
+                unit.move();
+                unit.render(this.ctx);
             }
-
-            this.units[id].move();
-
-            this.units[id].render(this.ctx);
         }
     }
 

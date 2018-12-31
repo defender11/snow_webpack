@@ -181,15 +181,16 @@ app = function () {
         key: "render",
         value: function render() {
             for (var id = 0; id < this.getUnitsCount(); id++) {
+                var unit = this.getUnit(id);
 
-                if (this.units[id].isDead()) {
+                if (unit.isDead()) {
                     this.removeUnit(id);
                     this.createUnit();
+                } else {
+
+                    unit.move();
+                    unit.render(this.ctx);
                 }
-
-                this.units[id].move();
-
-                this.units[id].render(this.ctx);
             }
         }
     }, {
@@ -279,12 +280,16 @@ var Unit = function () {
         _classCallCheck(this, Unit);
 
         this.id = id;
+
         this.life = _Utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRndInteger(15, 100);
-        this.speed = _Utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRndInteger(2, 50);
-        this.opacity = _Utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRndInteger(0, 80);
-        this.startPositionTop = _Utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRndInteger(-10, options.elHeight);
-        this.startPositionLeft = _Utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRndInteger(0, options.elWidth);
+        this.speed = _Utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRndFloat();
+        this.opacity = _Utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRndInteger(0, 90);
+
+        this.y = _Utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRndInteger(-50, options.elHeight);
+        this.x = _Utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRndInteger(0, options.elWidth);
+
         this.size = _Utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRndInteger(2, 7);
+
         this.spreading = {
             min: _Utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRndInteger(options.unitSpreading.min, 0),
             max: _Utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].getRndInteger(0, options.unitSpreading.max)
@@ -311,25 +316,107 @@ var Unit = function () {
             this.life = value;
         }
     }, {
-        key: 'move',
-        value: function move() {
-
-            this.subLife(1);
-
-            this.startPositionTop += this.speed;
-            // this.startPositionLeft++;
+        key: 'setID',
+        value: function setID(id) {
+            this.id = id;
+        }
+    }, {
+        key: 'getID',
+        value: function getID(id) {
+            return this.id;
+        }
+    }, {
+        key: 'getOpacity',
+        value: function getOpacity() {
+            return this.opacity;
+        }
+    }, {
+        key: 'setOpacity',
+        value: function setOpacity(value) {
+            this.opacity = value;
+        }
+    }, {
+        key: 'getSpeed',
+        value: function getSpeed() {
+            return this.speed;
+        }
+    }, {
+        key: 'setSpeed',
+        value: function setSpeed(value) {
+            this.speed = value;
+        }
+    }, {
+        key: 'getSize',
+        value: function getSize() {
+            return this.size;
+        }
+    }, {
+        key: 'setSize',
+        value: function setSize(value) {
+            this.size = value;
+        }
+    }, {
+        key: 'getY',
+        value: function getY() {
+            return this.y;
+        }
+    }, {
+        key: 'setY',
+        value: function setY(value) {
+            this.y = value;
+        }
+    }, {
+        key: 'getX',
+        value: function getX() {
+            return this.x;
+        }
+    }, {
+        key: 'setX',
+        value: function setX(value) {
+            this.x = value;
         }
     }, {
         key: 'isDead',
         value: function isDead() {
-            var lifeValue = this.getLife();
-            return !lifeValue;
+            var life = this.getLife();
+            var opacity = this.getOpacity();
+
+            if (!life || !opacity) {
+                return true;
+            }
+            return false;
+        }
+
+        // --------------
+
+    }, {
+        key: 'move',
+        value: function move() {
+            var y = this.getY(),
+                x = this.getX();
+
+            var life = this.getLife();
+            var speed = this.getSpeed();
+            var opacity = this.getOpacity();
+
+            if (life) {
+                this.setOpacity(parseInt(opacity - speed));
+                this.subLife(speed);
+            }
+
+            y += speed;
+
+            this.setY(y);
         }
     }, {
         key: 'unitDraw',
         value: function unitDraw(ctx) {
+            var y = this.getY(),
+                x = this.getX(),
+                size = this.getSize();
+
             ctx.beginPath();
-            ctx.arc(this.startPositionLeft, this.startPositionTop, this.size, 0, Math.PI * 2, false);
+            ctx.arc(x, y, size, 0, Math.PI * 2, true);
             ctx.fillStyle = "rgba(" + this.color + ", 0." + this.opacity + ")";
             ctx.fill();
         }
@@ -359,6 +446,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
 	getRndInteger: function getRndInteger(min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
+	},
+	getRndFloat: function getRndFloat() {
+		return parseFloat(Math.random().toFixed(2));
 	}
 });
 
