@@ -12,13 +12,15 @@ app = class App {
 
         this.options.elWidth = settings.el.offsetWidth;
         this.options.elHeight = settings.el.offsetHeight;
-        this.options.unitsCount = 0;
-        this.options.unitSpreading.min = -15;
-        this.options.unitSpreading.max = 20;
+
+        this.options.unitsCount = 5;
 
         this.options.color = settings.color !== '' ? settings.color : '0, 0, 0';
 
         this.ctx = this.options.el.getContext("2d");
+
+        this.mouseX = 0;
+        this.mouseY = 0;
 
         this.generateUnits();
     }
@@ -30,6 +32,8 @@ app = class App {
             _this_o.clearCtx();
 
             _this_o.updateUnitsCount();
+
+            _this_o.updateMouseCoordinate();
 
             _this_o.render();
 
@@ -45,8 +49,9 @@ app = class App {
                 this.createUnit();
 
             } else {
+                let mouseOffset = this.getMouseCoordinate();
 
-                unit.move();
+                unit.move(mouseOffset);
                 unit.render(this.ctx);
             }
         }
@@ -100,5 +105,35 @@ app = class App {
         return this.units.length;
     }
 
+    setMouseX(value) {
+        this.mouseX = value;
+    }
+    setMouseY(value) {
+        this.mouseY = value;
+    }
+    getMouseX() {
+        return this.mouseX;
+    }
+    getMouseY() {
+        return this.mouseY;
+    }
+
+    updateMouseCoordinate() {
+        let mouseX,
+            mouseY;
+
+        mouseX = this.options.el.getAttribute('x');
+        mouseY = this.options.el.getAttribute('Y');
+
+        this.setMouseX(Number(mouseX));
+        this.setMouseY(Number(mouseY));
+    }
+
+    getMouseCoordinate() {
+        return {
+            x: this.getMouseX(),
+            y: this.getMouseY(),
+        };
+    }
 };
 export default app;

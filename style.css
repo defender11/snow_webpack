@@ -1,3 +1,9 @@
+body {
+  background: #00b5ff;
+  margin: 0;
+  padding: 0;
+}
+
 header {
   display: block;
   width: 100%;
@@ -8,7 +14,13 @@ header {
   font-weight: bold;
   background-position: center;
 }
-header img {
+header a {
+  display: block;
+  position: relative;
+  width: 135px;
+  height: 79px;
+}
+header a img {
   margin-top: 10px;
 }
 
@@ -19,7 +31,7 @@ header img {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 0;
 }
 #olSnowCanvas {
   width: inherit;

@@ -1,7 +1,9 @@
+
+var settings = require('./appSettings');
 var path = require('path');
 var webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
-var debug = 1;//process.env.NODE_ENV !== "production";
+// settings.debug = process.env.NODE_ENV !== "production";
 
 module.exports = {
 	entry: './index.js',
@@ -38,12 +40,12 @@ module.exports = {
 		ck_currency: 'ck_currency'
 	},
 
-	devtool: debug ? "source-map" : "",
-	mode: debug ? "development" : "production",
-	watch: !!debug,
+	devtool: settings.debug  ? "source-map" : "",
+	mode: settings.debug  ? "development" : "production",
+	watch: !!settings.debug ,
 	optimization:{
-		minimize: !debug
-	},
+		minimize: !settings.debug
+    },
 	plugins: [
 		new ExtractTextPlugin("[name]_styles.css"),
 	],

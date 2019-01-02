@@ -1,3 +1,8 @@
+body
+  background: #00b5ff
+  margin: 0
+  padding: 0
+
 header
   display: block
   width: 100%
@@ -8,8 +13,13 @@ header
   font-weight: bold
   background-position: center
 
-  img
-    margin-top: 10px
+  a
+    display: block
+    position: relative
+    width: 135px
+    height: 79px
+    img
+      margin-top: 10px
 
 
 #olSnow
@@ -19,7 +29,8 @@ header
   height: 100%
   top: 0
   left: 0
-  z-index: 10
+  //pointer-events: none
+  z-index: 0
 
   &Canvas
     width: inherit

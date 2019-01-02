@@ -1,4 +1,5 @@
 import Utils from './Utils.js';
+import unitMoveAlgorithm from './unitMoveAlgorithm.js'
 
 export default class Unit {
     constructor(id, options) {
@@ -11,12 +12,10 @@ export default class Unit {
         this.y = Utils.getRndInteger(-50, options.elHeight);
         this.x = Utils.getRndInteger(0, options.elWidth);
 
-        this.size = Utils.getRndInteger(2, 7);
+        this.plainH = options.elHeight;
+        this.plainW = options.elWidth;
 
-        this.spreading = {
-            min: Utils.getRndInteger(options.unitSpreading.min, 0),
-            max: Utils.getRndInteger(0, options.unitSpreading.max)
-        };
+        this.size = Utils.getRndInteger(1, 3);
 
         this.color = options.color !== '' ? options.color : '0, 0, 0';
     }
@@ -62,6 +61,13 @@ export default class Unit {
     getX() { return this.x; }
     setX(value) { this.x = value; }
 
+    getPlainW() {
+        return this.plainW;
+    }
+    getPlainH() {
+        return this.plainH;
+    }
+
     isDead() {
         let life= this.getLife();
         let opacity = this.getOpacity();
@@ -74,24 +80,41 @@ export default class Unit {
 
     // --------------
 
-    move() {
-        let y = this.getY(),
-            x = this.getX();
-
+    move(mouseOffset) {
         let life = this.getLife();
-        let speed = this.getSpeed();
-        let opacity = this.getOpacity();
 
         if (life) {
-            this.setOpacity(parseInt(opacity - speed));
-            this.subLife(speed);
+            let x = this.getX(),
+                y = this.getY(),
+                speed = this.getSpeed(),
+                opacity = this.getOpacity(),
+                plainW = this.getPlainW(),
+                plainH = this.getPlainH(),
+                speedRandom =  Utils.getRndFloat(),
+                mouseX = mouseOffset.x,
+                mouseY = mouseOffset.y;
+
+            let params = {
+                speed: speed,
+                speedRandom: speedRandom,
+                opacity: opacity,
+                plainW: plainW,
+                plainH: plainH,
+                mouseX: mouseX,
+                mouseY: mouseY,
+                x: x,
+                y: y,
+            };
+            let unitCalculateParams = unitMoveAlgorithm.getCalculateParams(params);
+
+            // --------------
+
+            this.setOpacity(unitCalculateParams.opacity);
+            this.subLife(unitCalculateParams.speed);
+            this.setX(unitCalculateParams.x);
+            this.setY(unitCalculateParams.y);
         }
-
-        y += speed;
-
-        this.setY(y);
     }
-
 
     unitDraw(ctx) {
         let y = this.getY(),
@@ -102,6 +125,7 @@ export default class Unit {
         ctx.arc(x, y, size, 0, Math.PI*2, true);
         ctx.fillStyle = "rgba(" + this.color + ", 0." + this.opacity + ")";
         ctx.fill();
+        ctx.closePath();
     }
 
     render(ctx) {
